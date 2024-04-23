@@ -1,0 +1,57 @@
+# Docker compose: used to manage multicontainer apps in a YAML file. 
+
+# we can start/ stop all containers at once. 
+
+# docker compose up  ; docker compose down 
+
+# There are 3 containers - source_postgres,destination_postgres, elt_script
+# Containers are isolated, so they are made to talk to each other via a network [elt_network]
+# networks:
+#      - elt_network
+
+
+
+version: '3'
+
+services:
+  source_postgres:
+    image: postgres:15.6
+    ports:
+      - "5433:5432"
+    networks:
+      - elt_network
+    environment:
+      POSTGRES_DB: source_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - ./source_db_init/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  destination_postgres:
+    image: postgres:15.6
+    ports:
+      - "5434:5432"
+    networks:
+      - elt_network
+    environment:
+      POSTGRES_DB: destination_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+
+  elt_script:
+    build:
+      context: ./elt # Directory containing the Dockerfile and elt_script.py
+      dockerfile: Dockerfile
+    networks:
+      - elt_network
+    depends_on:
+      - source_postgres
+      - destination_postgres
+
+networks:
+  elt_network:
+    driver: bridge
+# bridge is a network driver provided by Docker. 
+# It creates an isolated network on a single host. 
+# Each container in this network can communicate with other containers on the - 
+# same network using their service names as hostnames.
