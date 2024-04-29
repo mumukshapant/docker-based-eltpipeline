@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: films
+    description: "This table contains details about films."
+    columns:
+      - name: film_id
+        description: "Unique identifier for the film."
+        tests:
+          - unique
+          - not_null
+      - name: title
+        description: "Title of the film."
+        tests:
+          - not_null
+      - name: release_date
+        description: "Date the film was released."
+        tests:
+          - not_null
+      - name: price
+        description: "Price to buy a ticket."
+        tests:
+          - not_null
+      - name: rating
+        description: "The MPAA rating of the film."
+        tests:
+          - not_null
+      - name: user_rating
+        description: "Rating that users gave the film."
+        tests:
+          - not_null
+
+  - name: actors
+    description: "This table contains details about actors."
+    columns:
+      - name: actor_id
+        description: "Unique identifier for the actor."
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: "First name of the actor."
+        tests: []  # Provide an empty list if no tests are intended for this column
+
+  - name: film_actors
+    description: "This table maps films to the actors that starred in them."
+    columns:
+      - name: film_id
+        description: "Identifier for the film."
+        tests: []
+      - name: actor_id
+        description: "Identifier for the actor."
+        tests: []
