@@ -82,7 +82,7 @@ To verify our dbt pipeline was successfully created, we need to check if the " f
 
 >> \dt : show all tables
 
-
+***EDIT  : This was fixed by adding a condition to dbt container "depends on" 
 ** On running docker compose up , there might be an error which would translate to dbt not being able to connect to destination_db. For this, do 
 >> docker compose up 
 >> docker compose dbt 
@@ -91,3 +91,8 @@ To verify our dbt pipeline was successfully created, we need to check if the " f
  it seems like the dbt service depends on the destination_postgres service. If you simply run docker-compose up, Docker will start all services in the docker-compose.yaml file concurrently, which means dbt might start running before destination_postgres is fully ready to accept connections.
 
 When you run docker-compose up followed by docker-compose up dbt-1, the first command starts all the services including destination_postgres, and the second command starts dbt-1 specifically. At the time dbt-1 starts, destination_postgres is probably fully ready, hence we do not encounter any connection issues.
+
+### Branch cron 
+Cron job is basically to run the pipeline automatically at a particular time or during a particular interval.
+
+We just made changes in start.sh file & Dockerfile. 
